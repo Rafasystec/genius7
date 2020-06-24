@@ -1,0 +1,14 @@
+package com.genius7.enums;
+
+public enum ProArea {
+	OTHER,
+	CARPENTRY,
+	ELECTRICIAN,
+	MUSIC,
+	BRICKLAYER,
+	TIRE_SHOP,
+	MANICURE,
+	AESTHETICS,
+	HAIRDRESSER
+
+}
