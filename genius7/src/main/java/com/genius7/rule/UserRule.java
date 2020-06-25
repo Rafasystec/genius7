@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.genius7.model.User;
 import com.genius7.repository.UserRepo;
+import com.genius7.util.EncryptHelper;
 
 @Service
 public class UserRule {
@@ -23,6 +24,15 @@ public class UserRule {
 	
 	public Page<User> findAll(Pageable pagination) {
 		return userRepo.findAll(pagination);
+	}
+	
+	public User findByEmail(String email) {
+		Optional<User> optional = userRepo.findByEmail(email);
+		if(optional.isPresent()) {
+			return optional.get();
+		}else {
+			return null;
+		}
 	}
 	
 	public User find(Long id) {		
@@ -39,6 +49,8 @@ public class UserRule {
 	}
 	
 	public User insert(User user) {
+		String password = user.getPassword();
+		user.setPwd(EncryptHelper.cryptForDB(password));
 		return userRepo.save(user);
 	}
 }

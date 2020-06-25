@@ -4,6 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 public class RequestCredential {
 	
+	private Long userId;
 	private String email;
 	private String pwd;
 	public String getEmail() {
@@ -24,6 +25,14 @@ public class RequestCredential {
 	public UsernamePasswordAuthenticationToken getAuthentication() {
 		return new UsernamePasswordAuthenticationToken(email, pwd);
 	}
+	public Long getUserId() {
+		return userId;
+	}
+	public RequestCredential setUserId(Long userId) {
+		this.userId = userId;
+		return this;
+	}
+
 	
 	
 

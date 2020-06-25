@@ -7,11 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.genius7.model.User;
 import com.genius7.request.RequestCredential;
+import com.genius7.response.ResponseAuthentication;
 import com.genius7.util.TokenUtil;
 
 @RestController
@@ -19,19 +22,26 @@ import com.genius7.util.TokenUtil;
 public class AuthenticationController {
 
 	@Autowired
-	private AuthenticationManager atManager;
+	private AuthenticationManager authenticationManager;
 	@Autowired
 	private TokenUtil tokenUtil;
-	public ResponseEntity<?> authenticate(@RequestBody @Valid RequestCredential request) {
+	@PostMapping
+	public ResponseEntity<ResponseAuthentication> authenticate(@RequestBody @Valid RequestCredential request) {
+		ResponseAuthentication response = new ResponseAuthentication();
 		try {
-			atManager.authenticate(request.getAuthentication());
+			Authentication authenticate = authenticationManager.authenticate(request.getAuthentication());
+			User user = (User) authenticate.getPrincipal();
+			request.setUserId(user.getId());
 			String token = tokenUtil.getToken(request);
 			System.out.println(token);
+			response.setToken(token)
+			.setType("Bearer");
+			
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();
 		}
 		
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 		
 		
 	}

@@ -1,16 +1,25 @@
 package com.genius7.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.genius7.enums.EnumTypeUser;
 
 @Entity
 @Table(name="USER_DB")
-public class User extends SuperEntity{
+public class User extends SuperEntity implements UserDetails{
 
 	public static final User NOT_FOUND = new User();
 	
@@ -25,6 +34,8 @@ public class User extends SuperEntity{
 	@Column(name="TYPE")
 	@Enumerated(EnumType.ORDINAL)
 	private EnumTypeUser type = EnumTypeUser.OTHER;
+	@ManyToMany(fetch=FetchType.EAGER)
+	List<Profile> profiles = new ArrayList<>();
 	
 	/**
 	 * @return the email
@@ -64,6 +75,35 @@ public class User extends SuperEntity{
 	public User setType(EnumTypeUser type) {
 		this.type = type;
 		return this;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.profiles;
+	}
+	@Override
+	public String getPassword() {
+		return this.pwd;
+	}
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 	
 	
