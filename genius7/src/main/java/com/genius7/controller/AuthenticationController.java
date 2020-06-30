@@ -35,6 +35,8 @@ public class AuthenticationController {
 			String token = tokenUtil.getToken(request);
 			System.out.println(token);
 			response.setToken(token)
+			.setUserId(user.getId())
+//			.setUserName(user.getPro().getPerson().getName())
 			.setType("Bearer");
 			
 		} catch (AuthenticationException e) {

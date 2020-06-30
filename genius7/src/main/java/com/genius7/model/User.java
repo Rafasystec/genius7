@@ -10,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +37,11 @@ public class User extends SuperEntity implements UserDetails{
 	private EnumTypeUser type = EnumTypeUser.OTHER;
 	@ManyToMany(fetch=FetchType.EAGER)
 	List<Profile> profiles = new ArrayList<>();
+	@OneToOne(mappedBy="user")
+	private Pro pro;
+	@OneToOne(mappedBy="user")
+	private Cli cli;
+	
 	
 	/**
 	 * @return the email
@@ -104,6 +110,20 @@ public class User extends SuperEntity implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	public Pro getPro() {
+		return pro;
+	}
+	public User setPro(Pro pro) {
+		this.pro = pro;
+		return this;
+	}
+	public Cli getCli() {
+		return cli;
+	}
+	public User setCli(Cli cli) {
+		this.cli = cli;
+		return this;
 	}
 	
 	
