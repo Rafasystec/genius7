@@ -13,7 +13,7 @@ import com.genius7.repository.UserRepo;
 import com.genius7.util.EncryptHelper;
 
 @Service
-public class UserRule {
+public class UserRule extends SuperRule{
 
 	@Autowired
 	private UserRepo userRepo;
